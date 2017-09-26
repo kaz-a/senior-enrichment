@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import store from '../store';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 
@@ -12,7 +13,7 @@ const CampusDetail = (props) => {
 
   return(
     <div> 
-    {
+      {
       campusExist && campuses.filter(campus => {
         return campus.id === campusId
       }).map(campus => {
@@ -28,8 +29,8 @@ const CampusDetail = (props) => {
                 campus.students.map(student => {
                   return (
                     <li className="list-group-item" key={ student.id }>
-                      <strong>{ student.name }</strong> <br/> 
-                      { student.email }
+                      <Link to={`/students/${student.id}`}><strong>{ student.name }</strong> <br/> 
+                      { student.email }</Link>
                     </li>
                   )
                 })

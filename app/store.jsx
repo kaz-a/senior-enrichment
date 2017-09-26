@@ -8,27 +8,27 @@ import axios from 'axios'
 // Initial state
 const initialState = {
   students: [],
-  student: {},
+  newStudent: [],
   newStudentNameEntry: "",
   newStudentEmailEntry: "",
   campuses: [],
-  campus: "",
+  newCampus: [],
   newCampusEntry: ""
 }
 
 // Action types
-const GET_STUDENT = "GET_STUDENT",
+const CREATE_NEW_STUDENT = "CREATE_NEW_STUDENT",
   GET_STUDENTS = "GET_STUDENTS",
   WRITE_STUDENT_NAME = "WRITE_STUDENT_NAME",
   WRITE_STUDENT_EMAIL = "WRITE_STUDENT_EMAIL",
-  GET_CAMPUS = "GET_CAMPUS",
+  CREATE_NEW_CAMPUS = "CREATE_NEW_CAMPUS",
   GET_CAMPUSES = "GET_CAMPUSES",
   WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME";
   
 
 // Action creators
-export function getStudent(student){
-  return { type: GET_STUDENT, student }
+export function createStudent(newStudent){
+  return { type: CREATE_NEW_STUDENT, newStudent }
 }
 
 export function getStudents(students){
@@ -43,8 +43,8 @@ export function writeStudentEmail(studentEmail){
   return { type: WRITE_STUDENT_EMAIL, newStudentEmailEntry: studentEmail }
 }
 
-export function getCampus(campus){
-  return { type: GET_CAMPUS, campus }
+export function createCampus(newCampus){
+  return { type: CREATE_NEW_CAMPUS, newCampus }
 }
 
 export function getCampuses(campuses){
@@ -54,7 +54,6 @@ export function getCampuses(campuses){
 export function writeCampusName(campusName){
   return { type: WRITE_CAMPUS_NAME, newCampusEntry: campusName}
 }
-
 
 
 // Thunk creators
@@ -80,10 +79,10 @@ export function fetchCampuses () {
 
 export function postStudent (newStudent) {
   return function thunk (dispatch) {
-    return axios.post('/api/students', newStudent)
+    return axios.post('/api/students', { name: newStudent.name, email: newStudent.email })
       .then(res => res.data)
       .then(newStudent => {
-        dispatch(getStudent(newStudent))
+        dispatch(createtStudent(newStudent))
         // history.push(`/students/${newStudent.id}`)
       });
   }
@@ -91,36 +90,36 @@ export function postStudent (newStudent) {
 
 export function postCampus (newCampus){
   return function thunk (dispatch){
-    return axios.post('/api/campuses', newCampus)
+    return axios.post('/api/campuses', { name: newCampus })
       .then(res => res.data)
       .then(newCampus => {
-        dispatch(getCampus(newCampus))
+        dispatch(createCampus(newCampus))
       })
   }
 }
 
-export function deleteStudent(studentId) {
-  return function thunk (dispatch){
-    return axios.delete(`/api/students/${studentId}`)
-      .then(res => res.data)
-      .then(student => {
-        console.log('deleted student', student)
-        const students = students.filter(student => {
-          return student.id !== studentId
-        })
-        dispatch(getStudents(students))
-      })
-  }
-}
+// export function deleteStudent(studentId) {
+//   return function thunk (dispatch){
+//     return axios.delete(`/api/students/${studentId}`)
+//       .then(res => res.data)
+//       .then(student => {
+//         console.log('deleted student', student)
+//         const students = students.filter(student => {
+//           return student.id !== studentId
+//         })
+//         dispatch(getStudents(students))
+//       })
+//   }
+// }
 
 // Reducers
-function reducer(state=initialState, action){
+const reducer = (state=initialState, action) => {
   switch(action.type){
     case GET_STUDENTS:
       return Object.assign({}, state, { students: action.students })
       
-    case GET_STUDENT:
-      return Object.assign({}, state, { student: state.students.concat(action.student) })
+    case CREATE_NEW_STUDENT:
+      return Object.assign({}, state, { student: state.newStudent.concat(action.newStudent) })
       
     case WRITE_STUDENT_NAME:
       return Object.assign({}, state, { newStudentNameEntry: action.newStudentNameEntry })
@@ -131,17 +130,18 @@ function reducer(state=initialState, action){
     case GET_CAMPUSES:
       return Object.assign({}, state, { campuses: action.campuses })
       
-    case GET_CAMPUS:
-      return Object.assign({}, state, { campus: state.campuses.concat(action.campus) })
+    case CREATE_NEW_CAMPUS:
+      return Object.assign({}, state, { newCampus: state.newCampus.concat(action.newCampus) })
      
     case WRITE_CAMPUS_NAME:
       return Object.assign({}, state, { newCampusEntry: action.newCampusEntry })
-      
+
     default:
       return state;
     }
 
 }
+
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware, createLogger()));
 export default store;

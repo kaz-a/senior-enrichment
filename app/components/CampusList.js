@@ -4,17 +4,21 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom';
 import CampusDetail from './CampusDetail';
+import CampusForm from './CampusForm';
 
 
 const CampusList = (props) => {
   
   const { campuses } = props;
-  const campusExist = campuses && campuses.length 
+  const campusExist = campuses && campuses.length;
+  const listStyle = { marginTop: "69px" };
   
   return(
     <div>
-      <div className="col-xs-12 col-sm-4 col-md-4"><h1>Campuses</h1> </div> 
-      <div className="col-xs-12 col-sm-8 col-md-8">  
+      <div className="col-xs-12 col-sm-4 col-md-4"><h1>Campuses</h1> 
+        <CampusForm render={ <CampusForm campuses={ campuses } /> }/>
+      </div> 
+      <div className="col-xs-12 col-sm-8 col-md-8" style={ listStyle }>  
       {
         campusExist && campuses.map(campus => { 
           return (       

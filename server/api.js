@@ -51,25 +51,36 @@ api.get("/campuses/:id", (req, res, next) => {
 })
 
 // POST api/student
-api.post("/api/students", (req, res, next) => {
-  Student.create(req.body)
+api.post("/students", (req, res, next) => {
+  // Student.create(req.body)
+  // .then(data => {
+  //   console.log(req.body)
+  //   res.send(data)
+  // })
+  // .catch(next);
+
+  Student.create({
+    where: {
+      name: req.body.name,
+      email: req.body.email
+    }
+  })
+  .then(student => {
+    console.log("student created:", student)
+    res.send(student)
+  })
+  .catch(next)
+
+})
+
+
+api.post("/campuses", (req, res, next) => {
+  Campus.create(req.body)
   .then(data => {
+    console.log("posted campus:", data)
     res.send(data)
   })
   .catch(next);
-
-  // Student.create({
-  //   where: {
-  //     name: req.body.name,
-  //     email: req.body.email
-  //   }
-  // })
-  // .then(student => {
-  //   console.log("student created:", student)
-  //   res.send(student)
-  // })
-  // .catch(next)
-
 })
 
 // DELETE api/students/:id

@@ -8,13 +8,13 @@ const StudentForm = (props) => {
   console.log("props:", props)
   const { students, campuses, student, newStudentNameEntry, newStudentEmailEntry } = props;
   // const invalidInput = !props.newStudent.length; // fix this
-  const campusExist = campuses.campuses && campuses.campuses.length;
+  const campusExist = campuses && campuses.length;
   const inputStyle ={ marginBottom: "10px" }
 
   return(
     <div className="well">
       <h3> Add new student </h3>
-      <form onSubmit={ (event) => props.handleSubmit(newStudentNameEntry, newStudentEmailEntry, event) }>
+      <form onSubmit={ (event) => props.handleSubmit({ name: newStudentNameEntry, email: newStudentEmailEntry }, event) }>
         <div className="form-group">
           <input name="name" type="text" 
             className="form-control" style={ inputStyle }
@@ -29,7 +29,7 @@ const StudentForm = (props) => {
           <select>
             <option>Select Campus</option>
             {
-              campusExist && campuses.campuses.map(campus => {
+              campusExist && campuses.map(campus => {
                 return (
                   <option key={ campus.id }>{ campus.name }</option>
                 )         
@@ -66,12 +66,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleEmailChange: (event) => {
       dispatch(writeStudentEmail(event.target.value))
     },
-    handleSubmit: (name, email, event) => {
+    handleSubmit: (newStudent, event) => {
+      console.log("handleSubmit", newStudent)
       event.preventDefault();     
-      dispatch(postStudent({
-        name: event.target.name.value,
-        email: event.target.email.value
-      }))
+      dispatch(postStudent(newStudent))
 
 
 

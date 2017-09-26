@@ -13,10 +13,6 @@ const StudentDetail = (props) => {
 
   return(
     <div> 
-      <Link to="/students">
-        <span className="fa fa-arrow-circle-left" aria-hidden="true">
-        </span>&nbsp;&nbsp;Back to student list
-      </Link>
     {
       studentExist && students.filter(student => {
         return student.id === studentId
