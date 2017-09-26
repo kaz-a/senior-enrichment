@@ -8,7 +8,7 @@ import StudentDetail from './StudentDetail';
 
 
 const StudentList = (props) => {
-  console.log("props:", props)
+  // console.log("props:", props)
 
   const { students, campuses } = props;
   const studentsExist = students && students.length;
@@ -18,7 +18,6 @@ const StudentList = (props) => {
     listStyle = { marginTop: "69px" };
 
   const studentId = +props.match.params.id;
-  console.log("studentId:", props)
 
   return (
     <div>
@@ -70,28 +69,6 @@ const mapStateToProps = (state) => {
     students: state.students
   }
 }
-
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//   return {
-//     handleDelete(studentId){
-//       console.log("handleDelete fired", studentId)
-//       dispatch(deleteStudent(studentId))
-//       // dispatch(deleteStudent(event.target.value, ownProps.history))
-//     }
-//     // handleChange(event){
-//     //   dispatch(writeChannel(event.target.value))
-//     // },
-//     // handleSubmit(event){
-//     //   event.preventDefault();     
-//     //   // ownProps has `history`, `match`, `location` properties PLUS
-//     //   // custom properties passed into from parent
-//     //   // use ChannelName which is the 'name' attr of the input tag
-//     //   // and is available as a key for event.target object
-//     //   dispatch(postChannel(event.target.channelName.value, ownProps.history))
-//     // }
-//   }
-
-// }
 
   
 const studentListContainer = withRouter(connect(mapStateToProps)(StudentList))

@@ -52,43 +52,23 @@ api.get("/campuses/:id", (req, res, next) => {
 
 // POST api/student
 api.post("/api/students", (req, res, next) => {
-  // Student.create(req.body)
-  // .then(data => {
-  //   res.send(data)
-  // })
-  // .catch(next);
-
-  Student.create({
-    where: {
-      name: req.body.name,
-      email: req.body.email
-    }
+  Student.create(req.body)
+  .then(data => {
+    res.send(data)
   })
-  .then(student => {
-    console.log("student created:", student)
-    res.send(student)
-  })
-  .catch(next)
+  .catch(next);
 
-  // Author.findOrCreate({
+  // Student.create({
   //   where: {
-  //     name: req.body.name || 'Cody'
+  //     name: req.body.name,
+  //     email: req.body.email
   //   }
   // })
-  // .spread(author => {
-  //   const message = Message.build(req.body);
-  //   message.setAuthor(author, { save: false });
-  //   return message.save()
-  //     .then(message => {
-  //       message = message.toJSON();
-  //       message.author = author;
-  //       return message;
-  //     });
+  // .then(student => {
+  //   console.log("student created:", student)
+  //   res.send(student)
   // })
-  // .then(message => {
-  //   res.json(message);
-  // })
-  // .catch(next);
+  // .catch(next)
 
 })
 

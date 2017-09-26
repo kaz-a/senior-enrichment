@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import store from './store'
-// import store from './reducers/index'
 import Root from './components/Root'
 import Main from './components/Main'
 
