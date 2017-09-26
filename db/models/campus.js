@@ -3,11 +3,12 @@ const Sequelize = require('sequelize'),
 
 const Campus = db.define("campus", {
   name: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValue: "Terra"
   },
   image: {
     type: Sequelize.STRING,
-    defaultValue: "default.png"
+    defaultValue: "/images/default.png"
   }
 });
 

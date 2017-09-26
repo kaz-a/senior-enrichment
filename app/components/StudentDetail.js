@@ -19,10 +19,13 @@ const StudentDetail = (props) => {
       }).map(student => {
         return (
           <div key={ student.id }>
-            <div className="col-xs-12">
+            <div className="col-xs-12 col-md-4">
+              <img src="/images/profile.png" />
+            </div>
+            <div className="col-xs-12 col-md-8">
               <h1>{ student.name }</h1>
               Email: { student.email } <br/>
-              Campus: { student.campus.name } 
+              Campus: <Link to={`/campuses/${student.campus.id}`}>{ student.campus.name } </Link>
               
             </div>
           </div>

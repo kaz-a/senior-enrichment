@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import store, { postStudent, writeStudentName, writeStudentEmail } from '../store';
+import store, { fetchCampuses, postStudent, writeStudentName, writeStudentEmail, selectStudentCampus } from '../store';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom';
 
+
 const StudentForm = (props) => {
   console.log("props:", props)
-  const { students, campuses, student, newStudentNameEntry, newStudentEmailEntry } = props;
-  // const invalidInput = !props.newStudent.length; // fix this
+  const { campuses, newStudent, newStudentNameEntry, newStudentEmailEntry } = props;
   const campusExist = campuses && campuses.length;
   const inputStyle ={ marginBottom: "10px" }
 
@@ -20,13 +20,13 @@ const StudentForm = (props) => {
             className="form-control" style={ inputStyle }
             placeholder="Enter a name"
             onChange={ props.handleNameChange } 
-            value={ student.name } />
+            value={ newStudentNameEntry } />
           <input name="email" type="text" 
             className="form-control" style={ inputStyle }   
             placeholder="Enter an email"
             onChange={ props.handleEmailChange } 
-            value={ student.email } />
-          <select>
+            value={ newStudentEmailEntry } />
+          <select onChange={ props.handleCampusChange }>
             <option>Select Campus</option>
             {
               campusExist && campuses.map(campus => {
@@ -49,35 +49,42 @@ const StudentForm = (props) => {
 
 const mapStateToProps = (state) => {
   return{
-    student: state.student,
     campuses: state.campuses,
     students: state.students,
+    newStudent: state.newStudent,
     newStudentNameEntry: state.newStudentNameEntry,
-    newStudentEmailEntry: state.newStudentEmailEntry
+    newStudentEmailEntry: state.newStudentEmailEntry,
+    newStudentCampusEntry: state.newStudentCampusEntry
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handleNameChange: (event) => {
-      console.log(event.target.value)
       dispatch(writeStudentName(event.target.value))
     },
     handleEmailChange: (event) => {
       dispatch(writeStudentEmail(event.target.value))
     },
-    handleSubmit: (newStudent, event) => {
-      console.log("handleSubmit", newStudent)
+    handleCampusChange: (event) => {
+      // const selectedStudentCampusName = event.target.value;
+      // const selectedCampus = props.campuses.filter(campus => {
+      //   return campus.name = selectedStudentCampusName
+      // })
+      // console.log("selected campusId:", selectedCampus.id)
+
+      dispatch(selectStudentCampus(event.target.value))
+    },
+    handleSubmit: (newStudentEntry, event) => {
+      console.log("handleSubmit", newStudentEntry)
       event.preventDefault();     
-      dispatch(postStudent(newStudent))
-
-
+      dispatch(postStudent(newStudentEntry, 1)) // right now, campus is hardcoded as Mars
 
     }
   }
 }
 
-const studentFormContainer = withRouter(connect(mapStateToProps)(StudentForm))
+const studentFormContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(StudentForm))
 export default studentFormContainer;
 
 

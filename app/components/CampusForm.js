@@ -6,7 +6,7 @@ import store, { postCampus, writeCampusName } from '../store';
 
 const CampusForm = (props) => {
   console.log("props:", props)
-  const { campus, newCampusEntry } = props;
+  const { newCampus, newCampusEntry } = props;
   const inputStyle ={ marginBottom: "10px" }
   
   
@@ -32,7 +32,7 @@ const CampusForm = (props) => {
 
 const mapStateToProps = (state) => {
   return{
-    campus: state.campus,
+    newCampus: state.newCampus,
     newCampusEntry: state.newCampusEntry   
   }
 }
@@ -45,8 +45,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     
     handleSubmit: function(newCampusEntry, event){
       event.preventDefault(); 
-      const name = newCampusEntry;
-      const newCampus = name;   
       dispatch(postCampus(newCampusEntry))
     }
   }

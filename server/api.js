@@ -52,25 +52,12 @@ api.get("/campuses/:id", (req, res, next) => {
 
 // POST api/student
 api.post("/students", (req, res, next) => {
-  // Student.create(req.body)
-  // .then(data => {
-  //   console.log(req.body)
-  //   res.send(data)
-  // })
-  // .catch(next);
-
-  Student.create({
-    where: {
-      name: req.body.name,
-      email: req.body.email
-    }
+  Student.create(req.body)
+  .then(data => {
+    console.log(req.body)
+    res.send(data)
   })
-  .then(student => {
-    console.log("student created:", student)
-    res.send(student)
-  })
-  .catch(next)
-
+  .catch(next);
 })
 
 

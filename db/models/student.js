@@ -8,6 +8,10 @@ const Student = db.define("student", {
   },
   email: {
     type: Sequelize.STRING
+  },
+  image: {
+    type: Sequelize.STRING,
+    defaultValue: './images/profile.png' 
   }
 });
 
