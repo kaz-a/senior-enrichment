@@ -8,13 +8,14 @@ import axios from 'axios'
 // Initial state
 const initialState = {
   students: [],
-  newStudent: [],
+  newStudent: {},
   newStudentNameEntry: "",
   newStudentEmailEntry: "",
   newStudentCampusEntry: "",
   campuses: [],
-  newCampus: [],
+  newCampus: {},
   newCampusEntry: ""
+  // deletedCampus: {}
 }
 
 // Action types
@@ -26,6 +27,7 @@ const CREATE_NEW_STUDENT = "CREATE_NEW_STUDENT",
   CREATE_NEW_CAMPUS = "CREATE_NEW_CAMPUS",
   GET_CAMPUSES = "GET_CAMPUSES",
   WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME";
+  // DELETE_CAMPUS = "DELETE_CAMPUS";
   
 
 // Action creators
@@ -60,6 +62,10 @@ export function getCampuses(campuses){
 export function writeCampusName(campusName){
   return { type: WRITE_CAMPUS_NAME, newCampusEntry: campusName}
 }
+
+// export function deleteCampus(campus){
+//   return { type: DELETE_CAMPUS, deletedCampus: campus }
+// }
 
 
 // Thunk creators
@@ -123,6 +129,32 @@ export function postCampus (newCampus){
 //   }
 // }
 
+export function deleteCampus(allCampus, campusId){
+  console.log("deleteCampus:", allCampus, campusId)
+  return function thunk(dispatch){
+    return axios.delete(`/api/campuses/${campusId}`)
+      .then(res => res.data)
+      .then(campus => {
+        const allCampus = allCampus.filter(campus => {
+          return allCampus.id !== campusId
+        })
+        dispatch(getCampuses(allCampuses))
+      })
+  }
+}
+
+// // get the deleted campus
+// export function deleteCampus(campusId){
+//   console.log("deleteCampus:", state.campuses, campusId)
+//   return function thunk(dispatch){
+//     return axios.delete(`/api/campuses/${campusId}`)
+//       .then(res => res.data)
+//       .then(campus => {
+//         dispatch(deleteCampus(campus))
+//       })
+//   }
+// }
+
 
 // Reducers
 const reducer = (state=initialState, action) => {
@@ -131,7 +163,7 @@ const reducer = (state=initialState, action) => {
       return Object.assign({}, state, { students: action.students })
       
     case CREATE_NEW_STUDENT:
-      return Object.assign({}, state, { newStudent: state.newStudent.concat(action.newStudent) })
+      return Object.assign({}, state, { students: state.students.concat(action.newStudent) })
       
     case WRITE_STUDENT_NAME:
       return Object.assign({}, state, { newStudentNameEntry: action.newStudentNameEntry })
@@ -146,10 +178,13 @@ const reducer = (state=initialState, action) => {
       return Object.assign({}, state, { campuses: action.campuses })
       
     case CREATE_NEW_CAMPUS:
-      return Object.assign({}, state, { newCampus: state.newCampus.concat(action.newCampus) })
+      return Object.assign({}, state, { campuses: state.campuses.concat(action.newCampus) })
      
     case WRITE_CAMPUS_NAME:
       return Object.assign({}, state, { newCampusEntry: action.newCampusEntry })
+
+    // case DELETE_CAMPUS: // get the campuses WITHOUT the deletedCampus
+    //   return Object.assign({}, state, { campuses: action.campuses })
 
     default:
       return state;

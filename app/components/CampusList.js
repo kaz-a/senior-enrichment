@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import store from '../store';
+import store, { deleteCampus } from '../store';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom';
@@ -13,6 +13,8 @@ const CampusList = (props) => {
   const campusExist = campuses && campuses.length;
   const listStyle = { marginTop: "69px" };
   const btnStyle = { fontSize: "1.5em", color: "grey" };
+  const campusId = +props.match.params.id;
+  console.log("campusId:", campusId)
 
   return(
     <div>
@@ -25,7 +27,8 @@ const CampusList = (props) => {
           return (       
             <div className="col-xs-6 col-sm-4 col-md-4 col-lg-3" key={ campus.id }>
               <span className="fa fa-times pull-right" style={ btnStyle } aria-hidden="true"
-                onClick={ props.handleSubmit }></span>
+                onClick={ (event) => props.handleClick(campuses, campus.id, event) }>
+              </span>
               <Link className="thumbnail" to={`/campuses/${campus.id}`} >
                 <img src={ campus.image } />
                 <div className="caption">
@@ -33,7 +36,7 @@ const CampusList = (props) => {
                 </div>   
               
               </Link>
-            </div>   
+            </div>
           )        
         })
       }
@@ -52,10 +55,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps)=> {
   return {
-    handleSubmit: function(event){
+    handleClick: function(allCampuses, campusId, event){
       event.preventDefault();
+
       console.log("delete button clicked!")
-      // dispatch(deleteCampus(campusId))
+      dispatch(deleteCampus(allCampuses, campusId))
     }
 
   }

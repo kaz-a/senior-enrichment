@@ -64,7 +64,6 @@ api.post("/students", (req, res, next) => {
 api.post("/campuses", (req, res, next) => {
   Campus.create(req.body)
   .then(data => {
-    console.log("posted campus:", data)
     res.send(data)
   })
   .catch(next);
@@ -72,14 +71,22 @@ api.post("/campuses", (req, res, next) => {
 
 // DELETE api/students/:id
 api.delete("/api/students/:id", (req, res, next) => {
-  Task.destroy({ where: { id: req.params.id }})
-  .then((result) => {
-    console.log("deleting...", result)
-    res.sendStatus(204)
+  Student.destroy({ where: { id: req.params.id }})
+  .then(data => {
+    res.send(data)
   })
   .catch(next);
-});
+})
 
+// DELETE api/campuses/:id
+api.delete("/api/campuses/:id", (req, res, next) => {
+  Campus.destroy({ where: { id: req.params.id }})
+  .then(data => {
+    console.log("deleting...", data)
+    res.send(data)
+  })
+  .catch(next);
+})
 
 
 module.exports = api
