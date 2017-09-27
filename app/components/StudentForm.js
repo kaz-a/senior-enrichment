@@ -26,12 +26,12 @@ const StudentForm = (props) => {
             placeholder="Enter an email"
             onChange={ props.handleEmailChange } 
             value={ newStudentEmailEntry } />
-          <select onChange={ props.handleCampusChange }>
+          <select className="form-control" onChange={ props.handleCampusChange }>
             <option>Select Campus</option>
             {
               campusExist && campuses.map(campus => {
                 return (
-                  <option key={ campus.id }>{ campus.name }</option>
+                  <option key={ campus.id } value={ campus.id }>{ campus.name }</option>
                 )         
               })
             }
@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleSubmit: (newStudentEntry, event) => {
       console.log("handleSubmit", newStudentEntry)
       event.preventDefault();     
-      dispatch(postStudent(newStudentEntry, 1)) // right now, campus is hardcoded as Mars
+      dispatch(postStudent(newStudentEntry, 1)) // atm campus is hardcoded as Mars
 
     }
   }

@@ -13,8 +13,6 @@ const CampusList = (props) => {
   const campusExist = campuses && campuses.length;
   const listStyle = { marginTop: "69px" };
   const btnStyle = { fontSize: "1.5em", color: "grey" };
-  const campusId = +props.match.params.id;
-  console.log("campusId:", campusId)
 
   return(
     <div>
@@ -27,7 +25,7 @@ const CampusList = (props) => {
           return (       
             <div className="col-xs-6 col-sm-4 col-md-4 col-lg-3" key={ campus.id }>
               <span className="fa fa-times pull-right" style={ btnStyle } aria-hidden="true"
-                onClick={ (event) => props.handleClick(campuses, campus.id, event) }>
+                onClick={ (event) => props.handleClick(campus.id, event) }>
               </span>
               <Link className="thumbnail" to={`/campuses/${campus.id}`} >
                 <img src={ campus.image } />
@@ -55,11 +53,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps)=> {
   return {
-    handleClick: function(allCampuses, campusId, event){
+    handleClick: function(campusId, event){
       event.preventDefault();
-
-      console.log("delete button clicked!")
-      dispatch(deleteCampus(allCampuses, campusId))
+      dispatch(deleteCampus(campusId))
     }
 
   }

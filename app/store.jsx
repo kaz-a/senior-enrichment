@@ -14,8 +14,8 @@ const initialState = {
   newStudentCampusEntry: "",
   campuses: [],
   newCampus: {},
-  newCampusEntry: ""
-  // deletedCampus: {}
+  newCampusEntry: "",
+  campusId: 0
 }
 
 // Action types
@@ -26,8 +26,8 @@ const CREATE_NEW_STUDENT = "CREATE_NEW_STUDENT",
   SELECT_STUDENT_CAMPUS = "SELECT_STUDENT_CAMPUS",
   CREATE_NEW_CAMPUS = "CREATE_NEW_CAMPUS",
   GET_CAMPUSES = "GET_CAMPUSES",
-  WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME";
-  // DELETE_CAMPUS = "DELETE_CAMPUS";
+  WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME",
+  DELETE_CAMPUS = "DELETE_CAMPUS";
   
 
 // Action creators
@@ -63,9 +63,9 @@ export function writeCampusName(campusName){
   return { type: WRITE_CAMPUS_NAME, newCampusEntry: campusName}
 }
 
-// export function deleteCampus(campus){
-//   return { type: DELETE_CAMPUS, deletedCampus: campus }
-// }
+export function deleteCampusById(campusId){
+  return { type: DELETE_CAMPUS, campusId: campusId }
+}
 
 
 // Thunk creators
@@ -89,12 +89,12 @@ export function fetchCampuses () {
   }
 }
 
-export function postStudent (newStudent, campusId) {
+export function postStudent (newStudent) {
   return function thunk (dispatch) {
     return axios.post('/api/students', { 
         name: newStudent.name, 
         email: newStudent.email,
-        campusId: campusId 
+        campusId: newStudent.campusId 
       })
       .then(res => res.data)
       .then(newStudent => {
@@ -129,31 +129,19 @@ export function postCampus (newCampus){
 //   }
 // }
 
-export function deleteCampus(allCampus, campusId){
-  console.log("deleteCampus:", allCampus, campusId)
+export function deleteCampus(campusId){
   return function thunk(dispatch){
     return axios.delete(`/api/campuses/${campusId}`)
       .then(res => res.data)
-      .then(campus => {
-        const allCampus = allCampus.filter(campus => {
-          return allCampus.id !== campusId
-        })
-        dispatch(getCampuses(allCampuses))
+      .then(() => {
+        // const allCampuses = campuses.filter(campus => {
+        //   return campus.id !== campusId
+        // })
+        // dispatch(getCampuses(allCampuses));
+        dispatch(deleteCampusById(campusId))
       })
   }
 }
-
-// // get the deleted campus
-// export function deleteCampus(campusId){
-//   console.log("deleteCampus:", state.campuses, campusId)
-//   return function thunk(dispatch){
-//     return axios.delete(`/api/campuses/${campusId}`)
-//       .then(res => res.data)
-//       .then(campus => {
-//         dispatch(deleteCampus(campus))
-//       })
-//   }
-// }
 
 
 // Reducers
@@ -183,8 +171,11 @@ const reducer = (state=initialState, action) => {
     case WRITE_CAMPUS_NAME:
       return Object.assign({}, state, { newCampusEntry: action.newCampusEntry })
 
-    // case DELETE_CAMPUS: // get the campuses WITHOUT the deletedCampus
-    //   return Object.assign({}, state, { campuses: action.campuses })
+    case DELETE_CAMPUS: // get the campuses WITHOUT the campus with campusId
+      const campuses = state.campuses.filter(function(campus){
+        return campus.id !== action.campusId;
+      })      
+      return Object.assign({}, state, { campuses: campuses })
 
     default:
       return state;

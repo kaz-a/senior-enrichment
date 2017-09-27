@@ -4,7 +4,8 @@ const Sequelize = require('sequelize'),
 const Campus = db.define("campus", {
   name: {
     type: Sequelize.STRING,
-    defaultValue: "Terra"
+    defaultValue: "Terra",
+    unique: true
   },
   image: {
     type: Sequelize.STRING,

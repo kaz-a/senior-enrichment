@@ -70,20 +70,19 @@ api.post("/campuses", (req, res, next) => {
 })
 
 // DELETE api/students/:id
-api.delete("/api/students/:id", (req, res, next) => {
+api.delete("/students/:id", (req, res, next) => {
   Student.destroy({ where: { id: req.params.id }})
   .then(data => {
-    res.send(data)
+    res.sendStatus(204)
   })
   .catch(next);
 })
 
 // DELETE api/campuses/:id
-api.delete("/api/campuses/:id", (req, res, next) => {
-  Campus.destroy({ where: { id: req.params.id }})
+api.delete("/campuses/:id", (req, res, next) => {
+  Campus.destroy({ where: { id: +req.params.id }})
   .then(data => {
-    console.log("deleting...", data)
-    res.send(data)
+    res.sendStatus(204)
   })
   .catch(next);
 })
