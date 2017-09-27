@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleSubmit: (newStudentEntry, event) => {
       console.log("handleSubmit", newStudentEntry)
       event.preventDefault();     
-      dispatch(postStudent(newStudentEntry, 1)) // atm campus is hardcoded as Mars
+      dispatch(postStudent(newStudentEntry)) // atm campus is hardcoded as Mars
 
     }
   }

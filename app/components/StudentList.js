@@ -8,13 +8,11 @@ import StudentDetail from './StudentDetail';
 
 
 const StudentList = (props) => {
-  // console.log("props:", props)
 
   const { students, campuses } = props;
   const studentsExist = students && students.length;
   const campusExist = campuses && campuses.length;
   const listStyle = { marginTop: "69px" };
-  const studentId = +props.match.params.id;
 
   return (
     <div>
@@ -42,9 +40,7 @@ const StudentList = (props) => {
                   <td><Link to={`/students/${student.id}`}>{ student.name }</Link></td>
                   <td>
                     <select name="campusId" className="form-control" 
-                      onChange={ props.handleChangeCampusName }
-                      >
-                      
+                      onChange={ props.handleChangeCampusName }>   
                       {
                         campusExist && campuses.map(campus => {
                           return (
@@ -58,7 +54,8 @@ const StudentList = (props) => {
                     <button className="btn btn-sm btn-warning">Update</button>
                   </td> 
                   <td>
-                    <button className="btn btn-sm btn-danger">Delete</button>
+                    <button className="btn btn-sm btn-danger"
+                      onClick={ (event) => props.handleClick(student.id, event) }>Delete</button>
                   </td> 
                 </tr>
                 )
@@ -84,6 +81,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleChnageCampusName: function(event){
       console.log(event.target.value)
       // call a PUT request
+    }, 
+    handleClick: function(studentId, event){
+      event.preventDefault();
+      dispatch(deleteStudent(studentId))
     }
   }
 

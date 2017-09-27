@@ -71,7 +71,7 @@ api.post("/campuses", (req, res, next) => {
 
 // DELETE api/students/:id
 api.delete("/students/:id", (req, res, next) => {
-  Student.destroy({ where: { id: req.params.id }})
+  Student.destroy({ where: { id: +req.params.id }})
   .then(data => {
     res.sendStatus(204)
   })

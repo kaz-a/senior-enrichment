@@ -15,7 +15,8 @@ const initialState = {
   campuses: [],
   newCampus: {},
   newCampusEntry: "",
-  campusId: 0
+  campusId: 0,
+  studentId: 0
 }
 
 // Action types
@@ -24,6 +25,7 @@ const CREATE_NEW_STUDENT = "CREATE_NEW_STUDENT",
   WRITE_STUDENT_NAME = "WRITE_STUDENT_NAME",
   WRITE_STUDENT_EMAIL = "WRITE_STUDENT_EMAIL",
   SELECT_STUDENT_CAMPUS = "SELECT_STUDENT_CAMPUS",
+  DELETE_STUDENT = "DELETE_STUDENT",
   CREATE_NEW_CAMPUS = "CREATE_NEW_CAMPUS",
   GET_CAMPUSES = "GET_CAMPUSES",
   WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME",
@@ -48,7 +50,11 @@ export function writeStudentEmail(studentEmail){
 }
 
 export function selectStudentCampus(studentCampus){
-    return { type: SELECT_STUDENT_CAMPUS, newStudentCampusEntry: studentCampus }
+  return { type: SELECT_STUDENT_CAMPUS, newStudentCampusEntry: studentCampus }
+}
+
+export function deleteStudentById(studentId){
+  return { type: DELETE_STUDENT, studentId: studentId }
 }
 
 export function createCampus(newCampus){
@@ -114,30 +120,25 @@ export function postCampus (newCampus){
 }
 
 
-// // delete needs to be implemented for both student & campus - not started yet
-// export function deleteStudent(studentId) {
-//   return function thunk (dispatch){
-//     return axios.delete(`/api/students/${studentId}`)
-//       .then(res => res.data)
-//       .then(student => {
-//         console.log('deleted student', student)
-//         const students = students.filter(student => {
-//           return student.id !== studentId
-//         })
-//         dispatch(getStudents(students))
-//       })
-//   }
-// }
+export function deleteStudent(studentId) {
+  return function thunk (dispatch){
+    return axios.delete(`/api/students/${studentId}`)
+      .then(res => res.data)
+      .then(student => {
+        // console.log('deleted student', student)
+        // const students = students.filter(student => {
+        //   return student.id !== studentId
+        // })
+        dispatch(deleteStudentById(studentId))
+      })
+  }
+}
 
 export function deleteCampus(campusId){
   return function thunk(dispatch){
     return axios.delete(`/api/campuses/${campusId}`)
       .then(res => res.data)
       .then(() => {
-        // const allCampuses = campuses.filter(campus => {
-        //   return campus.id !== campusId
-        // })
-        // dispatch(getCampuses(allCampuses));
         dispatch(deleteCampusById(campusId))
       })
   }
@@ -147,6 +148,8 @@ export function deleteCampus(campusId){
 // Reducers
 const reducer = (state=initialState, action) => {
   switch(action.type){
+
+    // Student reducers
     case GET_STUDENTS:
       return Object.assign({}, state, { students: action.students })
       
@@ -162,6 +165,13 @@ const reducer = (state=initialState, action) => {
     case SELECT_STUDENT_CAMPUS:
       return Object.assign({}, state, { newStudentCampusEntry: action.newStudentCampusEntry })
 
+    case DELETE_STUDENT:
+      const students = state.students.filter(function(student){
+        return student.id !== action.studentId;
+      })
+      return Object.assign({}, state, { students: students })
+
+    // Campus reducers
     case GET_CAMPUSES:
       return Object.assign({}, state, { campuses: action.campuses })
       
