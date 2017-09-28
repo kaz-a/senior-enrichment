@@ -60,7 +60,7 @@ api.post("/students", (req, res, next) => {
   .catch(next);
 })
 
-
+// POST api/campuses
 api.post("/campuses", (req, res, next) => {
   Campus.create(req.body)
   .then(data => {
@@ -72,7 +72,7 @@ api.post("/campuses", (req, res, next) => {
 // DELETE api/students/:id
 api.delete("/students/:id", (req, res, next) => {
   Student.destroy({ where: { id: +req.params.id }})
-  .then(data => {
+  .then(() => {
     res.sendStatus(204)
   })
   .catch(next);
@@ -81,7 +81,7 @@ api.delete("/students/:id", (req, res, next) => {
 // DELETE api/campuses/:id
 api.delete("/campuses/:id", (req, res, next) => {
   Campus.destroy({ where: { id: +req.params.id }})
-  .then(data => {
+  .then(() => {
     res.sendStatus(204)
   })
   .catch(next);

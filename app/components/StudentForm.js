@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import store, { fetchCampuses, postStudent, writeStudentName, writeStudentEmail, selectStudentCampus } from '../store';
+import store, { fetchCampuses, createStudent, postStudent, writeStudentName, writeStudentEmail, selectStudentCampus, setStudentCampusId } from '../store';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
 
 const StudentForm = (props) => {
-  console.log("props:", props)
-  const { campuses, newStudent, newStudentNameEntry, newStudentEmailEntry } = props;
+  const { campuses, newStudent, newStudentNameEntry, newStudentEmailEntry, newStudentCampusEntry, campusId } = props;
   const campusExist = campuses && campuses.length;
   const inputStyle ={ marginBottom: "10px" }
 
   return(
     <div className="well">
       <h3> Add new student </h3>
-      <form onSubmit={ (event) => props.handleSubmit({ name: newStudentNameEntry, email: newStudentEmailEntry }, event) }>
+      <form onSubmit={ (event) => props.handleSubmit({ name: newStudentNameEntry, email: newStudentEmailEntry, campusId: newStudentCampusEntry }, event) }>
         <div className="form-group">
           <input name="name" type="text" 
             className="form-control" style={ inputStyle }
@@ -26,7 +26,7 @@ const StudentForm = (props) => {
             placeholder="Enter an email"
             onChange={ props.handleEmailChange } 
             value={ newStudentEmailEntry } />
-          <select className="form-control" onChange={ props.handleCampusChange }>
+          <select name="campus" className="form-control" onChange={ props.handleCampusChange }>
             <option>Select Campus</option>
             {
               campusExist && campuses.map(campus => {
@@ -67,12 +67,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(writeStudentEmail(event.target.value))
     },
     handleCampusChange: (event) => {
-      // const selectedStudentCampusName = event.target.value;
-      // const selectedCampus = props.campuses.filter(campus => {
-      //   return campus.name = selectedStudentCampusName
-      // })
-      // console.log("selected campusId:", selectedCampus.id)
-
       dispatch(selectStudentCampus(event.target.value))
     },
     handleSubmit: (newStudentEntry, event) => {
@@ -86,9 +80,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const studentFormContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(StudentForm))
 export default studentFormContainer;
-
-
-
-
-
 

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom';
-import store, { postCampus, writeCampusName } from '../store';
+import store, { postCampus, writeCampusName, resetCampusForm } from '../store';
 
 const CampusForm = (props) => {
-  console.log("props:", props)
+  // console.log("props:", props)
   const { newCampus, newCampusEntry } = props;
   const inputStyle ={ marginBottom: "10px" }
   
@@ -46,6 +46,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     handleSubmit: function(newCampusEntry, event){
       event.preventDefault(); 
       dispatch(postCampus(newCampusEntry))
+      // dispatch(resetCampusForm()) // clear the form afte submission - not working
     }
   }
 }

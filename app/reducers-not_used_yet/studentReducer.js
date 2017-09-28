@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-// import rootReducer from './reducers/rootReducer';
 import createLogger from 'redux-logger'; // https://github.com/evgenyrodionov/redux-logger
 import thunkMiddleware from 'redux-thunk'; // https://github.com/gaearon/redux-thunk
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -12,10 +11,6 @@ const initialState = {
   newStudentNameEntry: "",
   newStudentEmailEntry: "",
   newStudentCampusEntry: "",
-  campuses: [],
-  newCampus: {},
-  newCampusEntry: "",
-  campusId: 3,
   studentId: 0
 }
 
@@ -25,11 +20,7 @@ const CREATE_NEW_STUDENT = "CREATE_NEW_STUDENT",
   WRITE_STUDENT_NAME = "WRITE_STUDENT_NAME",
   WRITE_STUDENT_EMAIL = "WRITE_STUDENT_EMAIL",
   SELECT_STUDENT_CAMPUS = "SELECT_STUDENT_CAMPUS",
-  DELETE_STUDENT = "DELETE_STUDENT",
-  CREATE_NEW_CAMPUS = "CREATE_NEW_CAMPUS",
-  GET_CAMPUSES = "GET_CAMPUSES",
-  WRITE_CAMPUS_NAME = "WRITE_CAMPUS_NAME",
-  DELETE_CAMPUS = "DELETE_CAMPUS";
+  DELETE_STUDENT = "DELETE_STUDENT";
   
 
 // Action creators
@@ -57,22 +48,6 @@ export function deleteStudentById(studentId){
   return { type: DELETE_STUDENT, studentId: studentId }
 }
 
-export function createCampus(newCampus){
-  return { type: CREATE_NEW_CAMPUS, newCampus }
-}
-
-export function getCampuses(campuses){
-  return { type: GET_CAMPUSES, campuses }
-}
-
-export function writeCampusName(campusName){
-  return { type: WRITE_CAMPUS_NAME, newCampusEntry: campusName}
-}
-
-export function deleteCampusById(campusId){
-  return { type: DELETE_CAMPUS, campusId: campusId }
-}
-
 
 
 // Thunk creators
@@ -82,16 +57,6 @@ export function fetchStudents () {
       .then(res => res.data)
       .then(students => {
         dispatch(getStudents(students));
-      });
-  }
-}
-
-export function fetchCampuses () {
-  return function thunk (dispatch) {
-    return axios.get('/api/campuses')
-      .then(res => res.data)
-      .then(campuses => {
-        dispatch(getCampuses(campuses));
       });
   }
 }
@@ -110,16 +75,6 @@ export function postStudent (newStudent) {
   }
 }
 
-export function postCampus (newCampus){
-  return function thunk (dispatch){
-    return axios.post('/api/campuses', { name: newCampus })
-      .then(res => res.data)
-      .then(newCampus => {
-        dispatch(createCampus(newCampus))
-      })
-  }
-}
-
 
 export function deleteStudent(studentId) {
   return function thunk (dispatch){
@@ -131,22 +86,11 @@ export function deleteStudent(studentId) {
   }
 }
 
-export function deleteCampus(campusId){
-  return function thunk(dispatch){
-    return axios.delete(`/api/campuses/${campusId}`)
-      .then(res => res.data)
-      .then(() => {
-        dispatch(deleteCampusById(campusId))
-      })
-  }
-}
 
 
 // Reducers
-const rootReducer = (state=initialState, action) => {
+const studentReducer = (state=initialState, action) => {
   switch(action.type){
-
-    // Student reducers
     case GET_STUDENTS:
       return Object.assign({}, state, { students: action.students })
       
@@ -168,23 +112,6 @@ const rootReducer = (state=initialState, action) => {
       })
       return Object.assign({}, state, { students: students })
 
-    // Campus reducers
-    case GET_CAMPUSES:
-      return Object.assign({}, state, { campuses: action.campuses })
-      
-    case CREATE_NEW_CAMPUS:
-      return Object.assign({}, state, { campuses: state.campuses.concat(action.newCampus) })
-     
-    case WRITE_CAMPUS_NAME:
-      return Object.assign({}, state, { newCampusEntry: action.newCampusEntry })
-
-    case DELETE_CAMPUS: // get the campuses WITHOUT the campus with campusId
-      const campuses = state.campuses.filter(function(campus){
-        return campus.id !== action.campusId;
-      })      
-      return Object.assign({}, state, { campuses: campuses })
-
-
     default:
       return state;
     }
@@ -192,8 +119,7 @@ const rootReducer = (state=initialState, action) => {
 }
 
 
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, createLogger()));
-export default store;
+export default studentReducer;
 
 
 

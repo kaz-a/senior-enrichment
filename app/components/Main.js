@@ -9,6 +9,7 @@ import CampusDetail from './CampusDetail';
 import StudentDetail from './StudentDetail';
 import store, { fetchCampuses, fetchStudents } from '../store';
 
+ 
 export default class Main extends Component {
 
   componentDidMount () {

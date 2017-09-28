@@ -12,7 +12,7 @@ const db = require('../index'),
   Campus = require('./campus');
 
 Student.belongsTo(Campus);
-Campus.hasMany(Student, { onDelete: 'cascade' });
+Campus.hasMany(Student);
 
 db.sync({ force: true })
 .then(() => {

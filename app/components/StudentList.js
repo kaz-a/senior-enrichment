@@ -39,8 +39,8 @@ const StudentList = (props) => {
                   <th scope="row">{ student.id }</th>
                   <td><Link to={`/students/${student.id}`}>{ student.name }</Link></td>
                   <td>
-                    <select name="campusId" className="form-control" 
-                      onChange={ props.handleChangeCampusName }>   
+                    <select className="form-control" 
+                      onChange={ props.handleChageCampusName }>  
                       {
                         campusExist && campuses.map(campus => {
                           return (
@@ -78,7 +78,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    handleChnageCampusName: function(event){
+    handleChageCampusName: function(event){
       console.log(event.target.value)
       // call a PUT request
     }, 
@@ -92,16 +92,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   
 const studentListContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(StudentList))
 export default studentListContainer;
-
-
-
-
-
-
-
-
-
-
-
-
 
