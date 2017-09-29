@@ -70,9 +70,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(selectStudentCampus(event.target.value))
     },
     handleSubmit: (newStudentEntry, event) => {
-      console.log("handleSubmit", newStudentEntry)
-      event.preventDefault();     
-      dispatch(postStudent(newStudentEntry)) // atm campus is hardcoded as Mars
+      event.preventDefault();
+      dispatch(postStudent(newStudentEntry))
 
     }
   }
@@ -80,4 +79,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const studentFormContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(StudentForm))
 export default studentFormContainer;
-

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import store, { postCampus, writeCampusName, resetCampusForm } from '../store';
 
 const CampusForm = (props) => {
-  // console.log("props:", props)
   const { newCampus, newCampusEntry } = props;
   const inputStyle ={ marginBottom: "10px" }
   
@@ -39,14 +38,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    handleChange: function(event) {
+    handleChange: function(event) {      
       dispatch(writeCampusName(event.target.value))
     },
-    
+    handleCampusIdChange: function(event){
+      dispatch(selectStudentCampus(event.target.value))
+    },    
     handleSubmit: function(newCampusEntry, event){
       event.preventDefault(); 
       dispatch(postCampus(newCampusEntry))
-      // dispatch(resetCampusForm()) // clear the form afte submission - not working
     }
   }
 }

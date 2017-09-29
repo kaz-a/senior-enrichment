@@ -11,6 +11,7 @@ const db = require('../db'),
 api.get('/hello', (req, res) => res.send({hello: 'world'}))
 
 
+// STUDENT
 // GET api/students
 api.get("/students", (req, res, next) => {
   Student.findAll({ 
@@ -19,15 +20,6 @@ api.get("/students", (req, res, next) => {
   })
   .then(data => {
     res.send(data)
-  })
-  .catch(next);
-})
-
-// GET api/campuses
-api.get("/campuses", (req, res, next) => {
-  Campus.findAll({ include: [ Student ] })
-  .then(data => {
-    res.send(data);
   })
   .catch(next);
 })
@@ -41,28 +33,18 @@ api.get("/students/:id", (req, res, next) => {
   .catch(next);
 })
 
-// GET api/campuses/:id
-api.get("/campuses/:id", (req, res, next) => {
-  Campus.findById(+req.params.id, { include: [ Student ]})
-  .then(data => {
-    res.send(data)
-  })
-  .catch(next);
-})
-
 // POST api/student
 api.post("/students", (req, res, next) => {
   Student.create(req.body)
   .then(data => {
-    console.log(req.body)
     res.send(data)
   })
   .catch(next);
 })
 
-// POST api/campuses
-api.post("/campuses", (req, res, next) => {
-  Campus.create(req.body)
+// PUT api/students/:id
+api.put("/students/:id", (req, res, next) => {
+  Student.update(req.body, { where: { id: +req.params.id }})
   .then(data => {
     res.send(data)
   })
@@ -74,6 +56,35 @@ api.delete("/students/:id", (req, res, next) => {
   Student.destroy({ where: { id: +req.params.id }})
   .then(() => {
     res.sendStatus(204)
+  })
+  .catch(next);
+})
+
+
+// CAMPUS
+// GET api/campuses
+api.get("/campuses", (req, res, next) => {
+  Campus.findAll({ include: [ Student ] })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(next);
+})
+
+// GET api/campuses/:id
+api.get("/campuses/:id", (req, res, next) => {
+  Campus.findById(+req.params.id, { include: [ Student ]})
+  .then(data => {
+    res.send(data)
+  })
+  .catch(next);
+})
+
+// POST api/campuses
+api.post("/campuses", (req, res, next) => {
+  Campus.create(req.body)
+  .then(data => {
+    res.send(data)
   })
   .catch(next);
 })
